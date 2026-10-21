@@ -1,0 +1,2 @@
+# Test tooling; the project has no runtime dependencies yet.
+pytest>=8.0,<9.0
