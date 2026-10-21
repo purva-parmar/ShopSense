@@ -1,6 +1,6 @@
 # ShopSense
 Customer segmentation and repeat-purchase prediction using machine learning on retail transaction data.
-# ShopSense — Customer Personality & Shopping Pattern Analyzer
+# ShopSense - Customer Personality & Shopping Pattern Analyzer
 
 ## Overview
 ShopSense is a machine learning project that analyzes retail transactions to understand customer purchasing behavior, identify customer segments, and predict repeat purchases.
