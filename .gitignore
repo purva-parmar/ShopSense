@@ -4,4 +4,18 @@ __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
 .env
+.env.*
+!.env.example
 .DS_Store
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+build/
+dist/
+*.egg-info/
+
+# Local datasets - never commit raw data
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
