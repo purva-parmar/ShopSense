@@ -1,20 +1,83 @@
-# ShopSense — Retail Analytics Dataset Preparation
+# ShopSense
 
-ShopSense is a retail analytics project using the UCI Online Retail Excel transaction dataset. Phase 2 delivers transaction-level exploratory data analysis and cleaning; Phase 3 prepares customer-level features, repeat-purchase labels, and reproducible modeling splits. Predictive models and interactive applications remain later work.
+ShopSense is a retail analytics and machine-learning project built around transaction history. It explores customer purchasing behaviour, prepares a repeat-purchase prediction dataset, and is intended to support evidence-based customer segmentation and retail decision-making.
 
-## Dataset
+## Project status
 
-Download the **Online Retail** Excel workbook from the [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/352/online+retail) and place it at:
+ShopSense is under development and is a research/prototyping codebase, not a production-deployed application.
+
+**Implemented:** transaction-level EDA and quality auditing; reusable Excel/transaction cleaning; customer-level observation-window features; repeat-purchase labels; reproducible customer-level train, validation, and test data splits; automated tests.
+
+**Planned:** supervised model comparison and evaluation; customer segmentation; application integration; deployment and operational monitoring. Predictive performance has not been established, and no application deployment or production integration is claimed.
+
+## Business objectives
+
+- Understand customer purchase behaviour from transaction history.
+- Prepare and evaluate repeat-purchase prediction.
+- Explore customer segmentation as a separate analytical task.
+- Produce defensible retail insights that may support decision-making.
+
+## Data source and governance
+
+The project uses the [UCI Online Retail dataset](https://archive.ics.uci.edu/dataset/352/online+retail), an Excel transaction workbook containing invoice, product, quantity, date, unit-price, customer, and country fields. Obtain the workbook from the official UCI source and place it at the repository-relative path `data/raw/Online Retail.xlsx` for local processing.
+
+Phase 2 records missing values, exact duplicates, invalid dates, cancellation markers, and quantity/price signs. Exact duplicate rows and missing or unparseable dates are removed from cleaned outputs. The general cleaned transaction data retains returns (negative quantities), cancellation records, and rows missing `CustomerID` or `Description`. Positive-purchase transactions separately exclude cancellation invoices (invoice number begins with `C`) and require positive quantity and unit price. Customer-level analysis additionally requires an identifiable customer; transaction rows without customer IDs remain valid for transaction-level analysis.
+
+The raw workbook and generated files under `data/processed/` are intentionally excluded from Git. The raw source is not modified by the pipeline. Source provenance is attributed to UCI; users should review the dataset's current source-page terms and attribution guidance before redistribution or other use. No project software license is present in this repository.
+
+## Technical approach
+
+The implemented data path is:
+
+1. Explore the source workbook and produce transaction-level quality summaries.
+2. Load, validate, audit, and clean transactions through reusable preprocessing functions.
+3. Aggregate qualifying observation-window transactions into customer-level features.
+4. Construct a binary repeat-purchase target from a subsequent outcome window.
+5. Export customer modeling data with customer-isolated, deterministic train/validation/test splits.
+
+Planned work includes supervised model comparison and evaluation, customer segmentation and interpretation, and application integration/deployment. Python, pandas, openpyxl, Matplotlib, pytest, and Jupyter/IPython kernel tooling are used by the current project configuration. Specific modeling and UI technologies should be selected and added when those components are implemented.
+
+## Data-science methodology
+
+The current configured observation window is **2010-12-01 through 2011-05-31**, inclusive; the outcome window is **2011-06-01 through 2011-08-31**, inclusive. The feature pipeline checks the input date coverage before labeling. These dates reflect the verified local workbook coverage and current implementation; they are configuration choices, not universal definitions of repeat purchasing.
+
+Customer features are calculated only from qualifying observation-period purchases. The `repeat_purchase` target is 1 if the customer has at least one distinct qualifying invoice during the complete outcome window and 0 otherwise. Invoice counting is by distinct invoice number rather than line-item count. Customers need an identifiable `CustomerID` and at least one qualifying observation-period purchase to enter the cohort.
+
+The feature list is explicit; customer identifiers, target values, invoice IDs, raw transaction timestamps, and outcome-derived values are not predictive features. The current data split randomly partitions customers with target stratification, using a fixed seed and a 70%/15%/15% target ratio. It is **not an out-of-time evaluation**. Keep the test split held out for final evaluation. Any learned imputation, scaling, feature selection, resampling, or other transformation belongs in the model workflow and must be fit on training data only.
+
+## Repository structure
 
 ```text
-data/raw/Online Retail.xlsx
+.
+├── .github/workflows/
+│   └── tests.yml                 # GitHub Actions test workflow
+├── data/
+│   ├── raw/                      # Local source workbook; ignored by Git
+│   └── processed/                # Local generated data; ignored by Git
+├── docs/
+│   └── PRODUCTION_ROADMAP.md     # Engineering maturity plan
+├── notebooks/
+│   └── 01_eda.ipynb              # Reproducible transaction EDA
+├── src/
+│   ├── features.py               # Customer features, labels, splits, metadata
+│   └── preprocessing.py          # Transaction loading, audit, cleaning, export
+├── tests/
+│   ├── test_features.py          # Customer feature and split tests
+│   ├── test_preprocessing.py     # Transaction data-contract tests
+│   └── test_project_setup.py     # Project setup smoke tests
+├── .gitignore
+├── pyproject.toml                # Project metadata and pytest configuration
+├── README.md
+└── requirements.txt              # Runtime, notebook, and test dependencies
 ```
 
-The workbook is an Excel transaction file, not a database. The raw workbook is local-only, intentionally excluded from Git, and never modified by the pipeline. If it is missing, the EDA notebook stops with a clear file error; it does not substitute synthetic data.
+The notebook also writes local figures under `reports/figures/`; those generated figures are ignored by Git. `data/raw/` and `data/processed/` contain only tracked `.gitkeep` placeholders in a fresh clone.
 
-## Setup (Windows PowerShell)
+## Setup and installation
 
-Run from the repository root with Python 3.12:
+Use Python 3.12. Obtain the Excel workbook from the UCI link above and save it to the repository-relative raw-data path shown in **Data source and governance**. The pipeline raises a clear error if the workbook or Phase 2 cleaned transaction artifact is missing; it does not fabricate replacement data.
+
+**Windows PowerShell** (run from the repository root):
 
 ```powershell
 python -m venv .venv
@@ -23,89 +86,60 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
 python -m pip install -r requirements.txt
 ```
 
-Alternatively, use `.\.venv\Scripts\python.exe` explicitly without activating the environment.
+To run without activating the environment, substitute `.\.venv\Scripts\python.exe` for `python`.
 
-## Tests
+**macOS/Linux** (run from the repository root):
 
-```powershell
-python -m pytest -v
+```bash
+python3.12 -m venv .venv
+. .venv/bin/activate
+python -m pip install -r requirements.txt
 ```
 
-Tests use synthetic DataFrames and temporary Excel workbooks; they do not require downloading the UCI workbook.
-
-## EDA and preprocessing
-
-From the repository root, open `notebooks/01_eda.ipynb` in Jupyter and run its cells in order:
+Run the EDA notebook from the repository root:
 
 ```powershell
 python -m jupyter notebook notebooks/01_eda.ipynb
 ```
 
-The notebook locates the repository relative to its working directory, loads the real workbook through `src/preprocessing.py`, calculates its numeric findings from the data, displays and saves EDA charts, and writes the three processing artifacts below. It raises a clear error if the source workbook is unavailable.
-
-The pipeline can also be run without Jupyter:
+Generate the Phase 2 transaction outputs:
 
 ```powershell
 python -c "from src.preprocessing import run_preprocessing; run_preprocessing('data/raw/Online Retail.xlsx', 'data/processed')"
 ```
 
-| Artifact | Purpose |
-|---|---|
-| `data/processed/cleaned_transactions.csv` | Deduplicated transactions with valid dates; retains returns, cancellation invoices, and rows with missing customer IDs or descriptions. |
-| `data/processed/positive_purchase_transactions.csv` | Valid-date, non-cancellation rows with positive quantity and unit price; missing customer IDs and descriptions remain allowed. |
-| `data/processed/eda_audit.json` | Input schema, missingness, duplicates, date coverage, distinct entities, cancellation and sign counts, eligibility, and sequential exclusions. |
-
-Exact duplicate rows are removed deterministically. Missing or unparseable dates are audited and excluded from both outputs. The general cleaned set preserves negative-quantity returns and cancellation records; it does not remove rows solely due to missing `CustomerID` or `Description`, unusual values, or statistical outliers. Positive purchases use a separate eligibility policy: invoice numbers beginning with `C` (trimmed and case-insensitive) are treated as cancellations, and only positive `Quantity` and `UnitPrice` are retained. Audit issue categories can overlap; sequential exclusion counts are supplied separately for reconciliation.
-
-Raw input and generated processed data are intentionally excluded from Git. The notebook also saves local charts in `reports/figures/`.
-
-## Project status and phases
-
-- **Phase 1:** project structure, pytest configuration, setup tests, and CI.
-- **Phase 2:** transaction EDA, data-quality audit, reusable cleaning, tests, and documentation.
-- **Phase 3:** customer observation-window features, repeat-purchase target, customer-level modeling data, and reproducible leakage-free splits.
-- **Later phases:** supervised model training and evaluation; customer clustering; Streamlit UI and deployment.
-
-## Phase 3: customer features and repeat-purchase target
-
-The business question is: **Given a customer's qualifying purchase behavior during an observation period, will that customer make at least one qualifying purchase during the subsequent outcome period?**
-
-The default windows are observation **2010-12-01 through 2011-05-31**, followed by outcome **2011-06-01 through 2011-08-31**, with inclusive calendar-day boundaries. The Phase 2 cleaned source covers **2010-12-01 through 2011-12-09**, so the full outcome period is present. `src/features.py` checks coverage bounds at runtime and refuses to label a cohort if they do not cover the requested windows.
-
-Qualifying purchases reuse the Phase 2 rules: a valid invoice date, invoice number not beginning with `C` after trimming and case normalization, positive `Quantity`, and positive `UnitPrice`. A valid, non-missing `CustomerID` is additionally required for customer-level features and labels. Missing descriptions do not disqualify a purchase. Frequency and outcome events count distinct invoice numbers, not line-item rows. A customer is eligible only with at least one qualifying observation-window purchase and complete verified source coverage through the outcome end.
-
-Features are calculated only from observation-window purchases. The reference date for recency is the day after the inclusive observation end (2011-06-01): `recency_days` is the number of calendar days from the last observation purchase date to that reference. `frequency` is distinct observation invoices; `monetary` is the sum of line-level `Quantity * UnitPrice`; `distinct_products` counts non-missing stock codes; `active_purchase_days` counts distinct purchase dates; `average_invoice_value` is the mean of per-invoice line-revenue totals; `average_items_per_invoice` is the mean of per-invoice quantity totals; and `customer_tenure_days` is the first-to-last observation purchase date span. The target `repeat_purchase` is 1 when the eligible customer has at least one distinct qualifying outcome-window invoice, otherwise 0.
-
-Run the feature pipeline from the repository root after Phase 2 has generated `data/processed/cleaned_transactions.csv`:
+Then generate the Phase 3 customer dataset and splits:
 
 ```powershell
 python -c "from src.features import run_feature_pipeline; run_feature_pipeline('data/processed/cleaned_transactions.csv', 'data/processed')"
 ```
 
-Generated Phase 3 artifacts (all ignored by Git):
+These commands describe the implemented local data-preparation steps; they do not constitute a deployed or monitored end-to-end service.
 
-| File | Contents |
-|---|---|
-| `customer_features.csv` | One observation-only feature row per eligible customer, including `CustomerID` for joins and auditing. |
-| `repeat_purchase_labels.csv` | One `CustomerID` and `repeat_purchase` label per eligible customer. |
-| `customer_modeling_dataset.csv` | Joined identifiers, safe features, and target for the complete eligible cohort. |
-| `train.csv` | Training partition. |
-| `validation.csv` | Validation partition for model selection. |
-| `test.csv` | Held-out partition for final evaluation only. |
-| `modeling_metadata.json` | Date coverage/windows, definitions, eligibility, safe feature list, class/split counts, seed, and limitations. |
+## Testing and quality
 
-### Member 2 handoff
+Run the local automated tests from the repository root:
 
-- **Files:** `train.csv`, `validation.csv`, and `test.csv`.
-- **Target:** `repeat_purchase`.
-- **Identifier:** retain `CustomerID` for auditing and split-integrity checks, but do not use it as a predictor.
-- **Exact safe feature columns:** `recency_days`, `frequency`, `monetary`, `distinct_products`, `active_purchase_days`, `average_invoice_value`, `average_items_per_invoice`, `customer_tenure_days`. These are also listed in `modeling_metadata.json` under `features.predictive_feature_columns`.
-- Use only that explicit feature list to construct the model matrix; do not include identifiers, target, invoice IDs, raw timestamps, or outcome-derived fields.
-- Fit imputers, scalers, feature selection, and any other learned transformations on `train.csv` only; apply the fitted transformations unchanged to validation and test.
-- Use validation data for model selection. Preserve `test.csv` for final evaluation, and do not oversample or rebalance before splitting.
+```powershell
+python -m pytest -v
+```
 
-Splits use a fixed seed (42) and deterministic per-class allocation targeting 70%/15%/15%. Each target class must have at least three customers so it can appear in each partition; otherwise the pipeline raises an actionable error instead of silently producing an unstratified split. Small-class minimum representation can make actual proportions differ slightly; exact counts and proportions are recorded per split in metadata. No scaling, imputation, feature selection, resampling, predictive-model training, or model evaluation is performed in this phase.
+The tests use synthetic transactions and temporary files to exercise schema validation, cleaning, date-window boundaries, feature/label behavior, deterministic splits, and artifact exports without requiring the UCI workbook. `.github/workflows/tests.yml` defines a Python 3.12 GitHub Actions workflow for pushes and pull requests. A local test pass does not prove that a GitHub Actions run passed; confirm the workflow check on the relevant pull request.
 
-Source date bounds prove that the configured outcome window lies within the workbook's observed coverage; the pipeline cannot independently certify that the upstream source contains every transaction. Repeat-purchase labels describe this fixed three-month horizon, not a lifetime behavior. Customer IDs absent from transactions cannot be assigned to customer-level cohorts.
+## Results and evaluation
 
-Phase 3 is complete through dataset preparation only. Model training/evaluation, clustering, and UI/deployment remain unimplemented.
+The repository contains local EDA and modeling metadata artifacts when the pipelines have been run; generated datasets are not committed. The source workbook has been observed to cover 2010-12-01 through 2011-12-09, which contains the configured outcome window. Counts in local metadata are data-run outputs and may vary if the input workbook changes.
+
+No predictive model evaluation is implemented in the current repository. Precision, recall, F1, ROC-AUC, calibration, operational thresholds, and business impact have not been established. The current random customer split does not demonstrate generalization to a later time period.
+
+## Limitations and roadmap
+
+The current implementation prepares transaction and customer-level analytical datasets; it does not independently verify that upstream source coverage is complete, and a fixed repeat-purchase horizon is not a lifetime customer property. Model behavior, segment usefulness, application requirements, privacy controls, deployment, monitoring, and recovery procedures remain to be validated or implemented.
+
+See the [production engineering roadmap](docs/PRODUCTION_ROADMAP.md) for ordered work, acceptance criteria, risks, verification steps, and integration contracts.
+
+## Contribution, licensing, and acknowledgements
+
+Contributions should include focused changes, relevant tests, and documentation updates. Preserve the documented data contracts; changes to schemas, qualifying-purchase rules, target windows, or split semantics should be reviewed and communicated to downstream consumers. Confirm local tests and the applicable pull-request checks before integration.
+
+The repository currently has no software `LICENSE` file; no license for the project code is implied. The transaction dataset is attributed to the [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/352/online+retail). Consult the UCI dataset page for source attribution and applicable terms.
