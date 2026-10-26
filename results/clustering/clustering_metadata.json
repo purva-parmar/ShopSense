@@ -1,0 +1,67 @@
+{
+  "features": [
+    "recency_days",
+    "frequency",
+    "monetary"
+  ],
+  "preprocessing": "log1p then StandardScaler",
+  "algorithm": "KMeans(n_init=20)",
+  "random_seed": 42,
+  "n_customers": 2718,
+  "k": 4,
+  "k_range_tested": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "silhouette_at_k": 0.354,
+  "best_silhouette_k": 2,
+  "segment_names": {
+    "2": "Loyal Champions",
+    "0": "Lapsed / At-Risk",
+    "1": "Cooling Off",
+    "3": "Occasional Shoppers"
+  },
+  "centroids_original_units": {
+    "0": {
+      "recency_days": 93.38,
+      "frequency": 1.08,
+      "monetary": 216.01
+    },
+    "1": {
+      "recency_days": 55.2,
+      "frequency": 2.46,
+      "monetary": 956.23
+    },
+    "2": {
+      "recency_days": 11.98,
+      "frequency": 7.44,
+      "monetary": 2926.53
+    },
+    "3": {
+      "recency_days": 12.6,
+      "frequency": 1.77,
+      "monetary": 452.52
+    }
+  },
+  "artifacts": {
+    "model": "models/kmeans_pipeline.joblib",
+    "assignments": "results/clustering/cluster_assignments.csv",
+    "summary": "results/clustering/segment_summary.csv",
+    "k_selection": "results/clustering/k_selection.csv",
+    "figures": [
+      "results/clustering/elbow_plot.png",
+      "results/clustering/silhouette_plot.png",
+      "results/clustering/segments_pca.png",
+      "results/clustering/segments_recency_monetary.png",
+      "results/clustering/segment_sizes.png",
+      "results/clustering/segment_rfm_boxplots.png"
+    ]
+  }
+}

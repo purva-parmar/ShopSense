@@ -1,0 +1,5 @@
+cluster,segment,customers,share_pct,mean_recency_days,mean_frequency,mean_monetary,mean_distinct_products,mean_active_purchase_days,mean_average_invoice_value,mean_average_items_per_invoice,mean_customer_tenure_days,median_recency_days,median_frequency,median_monetary
+2,Loyal Champions,386,14.2,15.99,8.86,4951.11,105.86,7.53,573.67,314.42,141.48,13.0,7.0,2606.82
+1,Cooling Off,648,23.8,64.13,2.62,1235.25,52.22,2.45,646.08,421.99,67.94,55.0,2.0,913.62
+3,Occasional Shoppers,558,20.5,15.08,1.9,574.8,31.46,1.82,334.29,193.78,51.77,14.0,2.0,474.37
+0,Lapsed / At-Risk,1126,41.4,104.56,1.09,259.42,18.71,1.07,247.03,142.52,3.71,97.0,1.0,233.18
