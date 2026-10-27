@@ -1,0 +1,422 @@
+
+/* ==========================================
+   ShopSense — Light Retail Analytics
+========================================== */
+
+:root {
+    --page: #faf8f4;
+    --white: #ffffff;
+    --text: #252a35;
+    --muted: #747985;
+    --border: #e8e3da;
+    --teal: #16877d;
+    --coral: #e87965;
+    --lilac: #8b73c7;
+    --gold: #d29a2e;
+}
+
+/* Hide the sidebar completely */
+[data-testid="stSidebar"] {
+    display: none !important;
+}
+
+[data-testid="collapsedControl"] {
+    display: none !important;
+}
+
+/* Remove the default Streamlit top bar */
+[data-testid="stHeader"] {
+    background: transparent;
+}
+
+[data-testid="stToolbar"] {
+    display: none;
+}
+
+.stApp,
+[data-testid="stAppViewContainer"] {
+    background: var(--page);
+    color: var(--text);
+}
+
+.block-container {
+    max-width: 1450px;
+    padding: 2rem 3rem 2.5rem;
+}
+
+/* Typography */
+html,
+body,
+[class*="css"] {
+    font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+h1,
+h2,
+h3 {
+    color: var(--text) !important;
+}
+
+h1 {
+    font-size: 2.35rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -1.1px !important;
+}
+
+h2 {
+    font-size: 1.55rem !important;
+    font-weight: 750 !important;
+    letter-spacing: -0.45px !important;
+}
+
+h3 {
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+}
+
+p {
+    color: var(--text);
+    line-height: 1.7;
+}
+
+[data-testid="stCaptionContainer"] {
+    color: var(--muted);
+}
+
+/* Brand header */
+.brand-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 1.5rem;
+}
+
+.brand-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    background: #dff3ee;
+    font-size: 28px;
+}
+
+.brand-name {
+    color: var(--text);
+    font-size: 2rem;
+    font-weight: 850;
+    letter-spacing: -1px;
+    line-height: 1.2;
+}
+
+.brand-subtitle {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+/* Page headings */
+.eyebrow {
+    color: var(--teal);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 1.6px;
+    margin-bottom: 0.45rem;
+}
+
+.page-heading {
+    margin-top: 0 !important;
+    margin-bottom: 0.45rem !important;
+}
+
+.page-description {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 850px;
+    margin-bottom: 1.6rem;
+}
+
+/* Horizontal top navigation */
+div[role="radiogroup"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+div[role="radiogroup"] > label {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.55rem 0.9rem;
+    transition: all 0.18s ease;
+}
+
+div[role="radiogroup"] > label:hover {
+    background: #e8f5f1;
+    border-color: #acd9cf;
+}
+
+/* Streamlit metrics */
+[data-testid="stMetric"] {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.25rem 1.35rem;
+    min-height: 120px;
+    box-shadow: 0 5px 16px rgba(47, 43, 35, 0.04);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+[data-testid="stMetric"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(47, 43, 35, 0.08);
+}
+
+[data-testid="stMetricLabel"] {
+    color: var(--muted) !important;
+    font-size: 0.88rem !important;
+}
+
+[data-testid="stMetricValue"] {
+    color: var(--teal) !important;
+    font-size: 2rem !important;
+    font-weight: 800 !important;
+}
+
+/* Customer segment cards */
+.segment-card {
+    min-height: 118px;
+    padding: 1.1rem;
+    border-radius: 13px;
+    border: 1px solid rgba(40, 40, 40, 0.06);
+    margin-bottom: 0.6rem;
+    box-shadow: 0 4px 12px rgba(47, 43, 35, 0.035);
+    transition: transform 0.18s ease;
+}
+
+.segment-card:hover {
+    transform: translateY(-3px);
+}
+
+.segment-count {
+    font-size: 1.9rem;
+    font-weight: 850;
+    line-height: 1.3;
+}
+
+.segment-name {
+    color: #353945;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-top: 0.45rem;
+}
+
+/* Overview insight cards */
+.insight-card {
+    border-radius: 14px;
+    padding: 1.1rem 1.2rem;
+    margin-bottom: 0.9rem;
+    border: 1px solid transparent;
+}
+
+.teal-card {
+    background: #e2f4ef;
+    border-color: #c9e9df;
+}
+
+.coral-card {
+    background: #fff0eb;
+    border-color: #f5d9d0;
+}
+
+.insight-label {
+    color: #5e6571;
+    font-size: 0.73rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.insight-number {
+    color: #252a35;
+    font-size: 1.8rem;
+    font-weight: 850;
+    margin: 0.3rem 0;
+}
+
+.insight-description {
+    color: #626977;
+    font-size: 0.84rem;
+    line-height: 1.5;
+}
+
+/* Buttons */
+.stButton > button,
+.stFormSubmitButton > button {
+    background: var(--teal);
+    color: white;
+    border: 1px solid var(--teal);
+    border-radius: 10px;
+    padding: 0.65rem 1rem;
+    font-weight: 750;
+    transition: all 0.18s ease;
+}
+
+.stButton > button:hover,
+.stFormSubmitButton > button:hover {
+    background: #116a63;
+    color: white;
+    border-color: #116a63;
+}
+
+/* Inputs */
+.stTextInput input,
+.stNumberInput input,
+.stDateInput input {
+    background: white;
+    color: var(--text);
+    border-radius: 9px;
+}
+
+[data-baseweb="select"] > div {
+    background: white;
+    border-radius: 9px;
+}
+
+/* Form container */
+[data-testid="stForm"] {
+    background: #fffdf9;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+/* Data tables */
+[data-testid="stDataFrame"] {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Alerts */
+[data-testid="stAlert"] {
+    border-radius: 12px;
+}
+
+/* Expanders */
+[data-testid="stExpander"] {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+/* Chart and image containers */
+[data-testid="stImage"] img {
+    border-radius: 12px;
+}
+
+[data-testid="stPlotlyChart"],
+[data-testid="stVegaLiteChart"] {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 0.45rem;
+}
+
+/* Horizontal separators */
+hr {
+    border-color: var(--border) !important;
+    margin: 1.3rem 0 !important;
+}
+
+/* Footer */
+.app-footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.78rem;
+}
+
+.app-footer span:first-child {
+    color: var(--teal);
+    font-weight: 800;
+}
+
+/* Mobile screens */
+@media (max-width: 768px) {
+    .block-container {
+        padding: 1.2rem 1rem 2rem;
+    }
+
+    h1 {
+        font-size: 1.8rem !important;
+    }
+
+    h2 {
+        font-size: 1.35rem !important;
+    }
+
+    .brand-name {
+        font-size: 1.7rem;
+    }
+
+    .brand-subtitle {
+        font-size: 0.58rem;
+        letter-spacing: 0.8px;
+    }
+
+    .segment-card {
+        padding: 0.8rem;
+        min-height: 100px;
+    }
+
+    .segment-count {
+        font-size: 1.5rem;
+    }
+
+    .segment-name {
+        font-size: 0.75rem;
+    }
+
+    [data-testid="stMetric"] {
+        padding: 0.9rem;
+        min-height: 100px;
+    }
+
+    [data-testid="stMetricValue"] {
+        font-size: 1.5rem !important;
+    }
+
+    .app-footer {
+        flex-direction: column;
+    }
+}
+
+
+/* Navigation styled as app tabs */
+div[role="radiogroup"] > label > div:first-child {
+    display: none;
+}
+
+div[role="radiogroup"] > label:has(input:checked) {
+    background: #16877d;
+    border-color: #16877d;
+    color: white;
+}
+
+div[role="radiogroup"] > label:has(input:checked) * {
+    color: white !important;
+}
+
+div[role="radiogroup"] > label {
+    cursor: pointer;
+}
