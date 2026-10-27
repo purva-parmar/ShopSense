@@ -4,11 +4,13 @@ ShopSense is a retail analytics and machine-learning project built around transa
 
 ## Project status
 
-ShopSense is under development and is a research/prototyping codebase, not a production-deployed application.
+ShopSense is a retail analytics and machine-learning project that analyzes transaction history to understand customer purchasing behaviour, segment customers, and predict repeat purchases.
 
-**Implemented:** transaction-level EDA and quality auditing; reusable Excel/transaction cleaning; customer-level observation-window features; repeat-purchase labels; reproducible customer-level train, validation, and test data splits; automated tests.
+**Implemented:** Transaction-level EDA and data-quality auditing; reusable transaction preprocessing; customer-level feature engineering; repeat-purchase labels; reproducible train, validation, and test splits; customer segmentation and supervised model artifacts; Streamlit dashboard; cloud deployment; automated tests through GitHub Actions.
 
-**Planned:** supervised model comparison and evaluation; customer segmentation; application integration; deployment and operational monitoring. Predictive performance has not been established, and no application deployment or production integration is claimed.
+**Application:** The Streamlit dashboard provides an interface for exploring customer purchasing patterns, viewing customer segments, and generating repeat-purchase predictions. The live application is deployed using Streamlit Community Cloud.
+
+**Development status:** The application is deployed and the automated GitHub Actions test workflow passes. Predictive performance and the business usefulness of customer segments should be assessed using the project's actual evaluation results before making claims about model quality.
 
 ## Business objectives
 
