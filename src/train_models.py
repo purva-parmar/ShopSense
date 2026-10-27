@@ -297,10 +297,10 @@ def run_model_comparison(
             if key.startswith("test_")
         },
         "split_sizes": {
-            "train": int(len(X_train)),
-            "validation": int(len(X_validation)),
-            "test": int(len(X_test)),
-            "refit_train_validation": int(len(X_train_validation)),
+            "train": len(X_train),
+            "validation": len(X_validation),
+            "test": len(X_test),
+            "refit_train_validation": len(X_train_validation),
         },
         "notes": [
             "CustomerID is an identifier and is excluded from predictive features.",

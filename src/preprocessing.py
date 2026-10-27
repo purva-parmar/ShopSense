@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 import json
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 from zipfile import BadZipFile
@@ -265,13 +265,13 @@ def clean_transactions(transactions: pd.DataFrame) -> CleaningResult:
         "before_cleaning": initial_audit,
         "cleaning": {
             "row_counts": {
-                "input": int(len(source)),
+                "input": len(source),
                 "after_exact_duplicate_removal": int(after_duplicate_count),
-                "after_invalid_date_removal": int(len(cleaned)),
-                "cleaned_transactions": int(len(cleaned)),
-                "after_cancellation_exclusion": int(len(after_cancellations)),
-                "after_quantity_eligibility": int(len(after_quantity)),
-                "positive_purchase_transactions": int(len(positive_purchases)),
+                "after_invalid_date_removal": len(cleaned),
+                "cleaned_transactions": len(cleaned),
+                "after_cancellation_exclusion": len(after_cancellations),
+                "after_quantity_eligibility": len(after_quantity),
+                "positive_purchase_transactions": len(positive_purchases),
             },
             "exact_duplicate_rows_removed": int(duplicate_mask.sum()),
             "invalid_or_missing_dates_removed_after_deduplication": (

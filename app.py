@@ -1,10 +1,11 @@
 
 import json
+from pathlib import Path
+
 import joblib
+import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
-import matplotlib.pyplot as plt
-from pathlib import Path
 
 BASE = Path(__file__).parent
 

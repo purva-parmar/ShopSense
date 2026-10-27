@@ -23,14 +23,14 @@ import joblib
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import numpy as np  # noqa: E402
-import pandas as pd  # noqa: E402
-from sklearn.cluster import KMeans  # noqa: E402
-from sklearn.decomposition import PCA  # noqa: E402
-from sklearn.metrics import silhouette_score  # noqa: E402
-from sklearn.pipeline import Pipeline  # noqa: E402
-from sklearn.preprocessing import FunctionTransformer, StandardScaler  # noqa: E402
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+from sklearn.metrics import silhouette_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import FunctionTransformer, StandardScaler
 
 RANDOM_SEED = 42
 IDENTIFIER_COLUMN = "CustomerID"
@@ -270,7 +270,7 @@ def run_clustering(
         "preprocessing": "log1p then StandardScaler",
         "algorithm": "KMeans(n_init=20)",
         "random_seed": random_seed,
-        "n_customers": int(len(df)),
+        "n_customers": len(df),
         "k": int(k),
         "k_range_tested": [int(v) for v in scores["k"]],
         "silhouette_at_k": round(float(chosen["silhouette"]), 4),

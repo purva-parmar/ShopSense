@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-from datetime import date, timedelta
 import json
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
 
-from src.preprocessing import REQUIRED_COLUMNS, clean_transactions
+from src.preprocessing import clean_transactions
 
 OBSERVATION_START = date(2010, 12, 1)
 OBSERVATION_END = date(2011, 5, 31)
@@ -370,8 +370,8 @@ def build_customer_modeling_dataset(
                 "start": coverage_start.isoformat(),
                 "end": coverage_end.isoformat(),
             },
-            "phase2_cleaned_row_count": int(len(cleaned)),
-            "phase2_positive_purchase_row_count": int(len(purchases)),
+            "phase2_cleaned_row_count": len(cleaned),
+            "phase2_positive_purchase_row_count": len(purchases),
         },
         "windows": {
             "observation": {
@@ -455,8 +455,8 @@ def build_customer_modeling_dataset(
             ),
         },
         "counts": {
-            "source_coverage_rows": int(len(cleaned)),
-            "phase2_qualifying_purchase_rows": int(len(purchases)),
+            "source_coverage_rows": len(cleaned),
+            "phase2_qualifying_purchase_rows": len(purchases),
             "qualifying_purchase_rows_missing_customer_id": int(
                 (~_valid_identifier_mask(purchases[IDENTIFIER_COLUMN])).sum()
             ),
@@ -477,12 +477,10 @@ def build_customer_modeling_dataset(
                 - int(source_observation_mask.sum())
                 - int(source_outcome_mask.sum())
             ),
-            "outcome_customers_without_observation_purchase": int(
-                len(outcome_only_customers)
-            ),
-            "identified_observation_window_purchase_rows": int(len(observation)),
-            "identified_outcome_window_purchase_rows": int(len(outcome)),
-            "eligible_customer_count": int(len(modeling_dataset)),
+            "outcome_customers_without_observation_purchase": len(outcome_only_customers),
+            "identified_observation_window_purchase_rows": len(observation),
+            "identified_outcome_window_purchase_rows": len(outcome),
+            "eligible_customer_count": len(modeling_dataset),
             "overall": _class_summary(modeling_dataset),
             "per_split": {
                 name: _class_summary(split) for name, split in splits.items()
