@@ -363,10 +363,11 @@ st.markdown(
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.20);
     }
 
+    
     /* BUTTONS */
 
-    div.stButton > button,
-    div.stFormSubmitButton > button {
+    /* Default buttons keep the existing theme */
+    div.stButton > button {
         background: linear-gradient(135deg, #dbeafe, #bfdbfe, #e0e7ff);
         color: #ffffff !important;
         border: 0;
@@ -376,12 +377,33 @@ st.markdown(
         transition: transform 0.18s ease, box-shadow 0.18s ease;
     }
 
-    div.stButton > button:hover,
-    div.stFormSubmitButton > button:hover {
+    div.stButton > button:hover {
         color: #ffffff !important;
         transform: translateY(-1px);
         box-shadow: 0 0 20px rgba(236, 72, 153, 0.30);
     }
+
+    /* Run prediction form button only */
+    div[data-testid="stForm"] button[kind="secondaryFormSubmit"],
+    div[data-testid="stForm"] button[kind="primaryFormSubmit"],
+    div[data-testid="stForm"] [data-testid="stFormSubmitButton"] button {
+        background: #000000 !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        border: 1px solid #000000 !important;
+        border-radius: 11px !important;
+        font-weight: 800 !important;
+    }
+
+    div[data-testid="stForm"] button[kind="secondaryFormSubmit"]:hover,
+    div[data-testid="stForm"] button[kind="primaryFormSubmit"]:hover,
+    div[data-testid="stForm"] [data-testid="stFormSubmitButton"] button:hover {
+        background: #222222 !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        border-color: #f472b6 !important;
+    }
+
 
     /* INPUTS */
 
