@@ -23,7 +23,7 @@ from typing import Any
 import joblib
 import pandas as pd
 from sklearn.base import ClassifierMixin
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import ParameterGrid
@@ -41,27 +41,34 @@ from src.features import FEATURE_COLUMNS, IDENTIFIER_COLUMN, RANDOM_SEED, TARGET
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
-# Small, defensible grids that run on a laptop. Expand only if time permits.
 MODEL_GRIDS: dict[str, dict[str, list[Any]]] = {
     "logistic_regression": {
-        "C": [0.1, 1.0, 10.0],
+        "C": [0.01, 0.1, 1.0, 10.0, 100.0],
         "class_weight": [None, "balanced"],
     },
     "decision_tree": {
-        "max_depth": [None, 8, 16],
-        "min_samples_leaf": [1, 5],
+        "max_depth": [None, 6, 10, 16, 24],
+        "min_samples_leaf": [1, 2, 5, 10],
         "class_weight": [None, "balanced"],
     },
     "random_forest": {
-        "n_estimators": [60],
-        "max_depth": [None, 12],
-        "min_samples_leaf": [1, 3],
+        "n_estimators": [60, 100, 150],
+        "max_depth": [8, 12, 16, None],
+        "min_samples_leaf": [1, 2, 3, 5],
         "class_weight": [None, "balanced_subsample"],
+        "max_features": ["sqrt", 0.7],
     },
     "knn": {
-        "n_neighbors": [5, 11, 21],
+        "n_neighbors": [5, 11, 21, 31, 41],
         "weights": ["uniform", "distance"],
         "p": [1, 2],
+    },
+        "gradient_boosting": {
+        "n_estimators": [50, 100, 150],
+        "learning_rate": [0.03, 0.05, 0.1],
+        "max_depth": [1, 2, 3],
+        "min_samples_leaf": [2, 5, 10],
+        "subsample": [0.8, 1.0],
     },
 }
 
@@ -117,6 +124,11 @@ def _make_pipeline(model_name: str, params: dict[str, Any]) -> Pipeline:
             random_state=RANDOM_SEED, n_jobs=1, **params
         )
         steps = [("imputer", SimpleImputer(strategy="median"))]
+    elif model_name == "gradient_boosting":
+        estimator = GradientBoostingClassifier(
+            random_state=RANDOM_SEED, **params
+        )
+        steps = [("imputer", SimpleImputer(strategy="median"))]
     elif model_name == "knn":
         estimator = KNeighborsClassifier(n_jobs=-1, **params)
         steps = [("imputer", SimpleImputer(strategy="median")), ("scaler", StandardScaler())]
@@ -168,7 +180,7 @@ def run_model_comparison(
     models_directory: str | Path = "models",
     results_directory: str | Path = "results",
 ) -> dict[str, Any]:
-    """Train four models, tune on validation, test once, and export all artifacts."""
+    """Train five models, tune on validation, test once, and export all artifacts."""
     data_dir = _project_path(data_directory)
     model_dir = _project_path(models_directory)
     results_dir = _project_path(results_directory)
