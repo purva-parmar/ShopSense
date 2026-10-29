@@ -1,0 +1,65 @@
+{
+  "project": "ShopSense",
+  "task": "binary repeat-purchase classification",
+  "target_column": "repeat_purchase",
+  "positive_class": 1,
+  "positive_class_meaning": "At least one qualifying distinct invoice during the defined outcome window.",
+  "identifier_column": "CustomerID",
+  "feature_columns": [
+    "recency_days",
+    "frequency",
+    "monetary",
+    "distinct_products",
+    "active_purchase_days",
+    "average_invoice_value",
+    "average_items_per_invoice",
+    "customer_tenure_days"
+  ],
+  "random_seed": 42,
+  "selection_metric": "validation_f1",
+  "selection_rule": "Highest validation F1; ties broken by validation ROC-AUC, then validation recall.",
+  "selected_model": "random_forest",
+  "selected_model_parameters": {
+    "class_weight": "balanced_subsample",
+    "max_depth": 12,
+    "max_features": "sqrt",
+    "min_samples_leaf": 2,
+    "n_estimators": 60
+  },
+  "selected_model_validation_metrics": {
+    "accuracy": 0.7041564792176039,
+    "precision": 0.7204301075268817,
+    "recall": 0.6600985221674877,
+    "f1": 0.6889460154241646,
+    "roc_auc": 0.7373858147209337,
+    "pr_auc": 0.7623818076040678
+  },
+  "selected_model_test_metrics": {
+    "accuracy": 0.7139364303178484,
+    "precision": 0.7362637362637363,
+    "recall": 0.6600985221674877,
+    "f1": 0.6961038961038961,
+    "roc_auc": 0.7760533741451049,
+    "pr_auc": 0.8177212174885214
+  },
+  "split_sizes": {
+    "train": 1900,
+    "validation": 409,
+    "test": 409,
+    "refit_train_validation": 2309
+  },
+  "notes": [
+    "CustomerID is an identifier and is excluded from predictive features.",
+    "All learned preprocessing is contained in each exported sklearn Pipeline.",
+    "Hyperparameters and model selection use training and validation data only.",
+    "Test metrics are held-out evaluation results and must not be used to retune or select a model.",
+    "The selected pipeline is refit on train plus validation before final test scoring.",
+    "ROC-AUC and PR-AUC are undefined if an evaluation split contains only one class."
+  ],
+  "artifacts": {
+    "best_model": "models/best_model.joblib",
+    "model_comparison": "results/model_comparison.csv",
+    "validation_f1_plot": "results/validation_f1_comparison.png",
+    "test_f1_plot": "results/test_f1_comparison.png"
+  }
+}
