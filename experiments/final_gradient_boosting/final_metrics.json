@@ -1,0 +1,19 @@
+{
+  "model": "Gradient Boosting",
+  "selection_method": "5-fold CV on training split",
+  "cv_best_f1": 0.6725944093999886,
+  "validation_threshold": 0.5,
+  "validation_accuracy": 0.6919315403422983,
+  "validation_precision": 0.7251461988304093,
+  "validation_recall": 0.6108374384236454,
+  "validation_f1": 0.6631016042780749,
+  "validation_roc_auc": 0.7449064995934764,
+  "best_params": {
+    "classifier__subsample": 1.0,
+    "classifier__n_estimators": 75,
+    "classifier__min_samples_leaf": 5,
+    "classifier__max_features": "sqrt",
+    "classifier__max_depth": 3,
+    "classifier__learning_rate": 0.075
+  }
+}
